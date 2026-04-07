@@ -72,6 +72,17 @@ The frontend image substitutes `GRAPHQL_URL` at build time (default `http://loca
 - Deploy the Angular app (Vercel, Netlify, Cloudflare Pages, etc.) and set production `graphqlUrl` to the deployed GraphQL HTTPS endpoint.
 - Update `frontend/src/environments/environment.prod.ts` before production builds, or pass `GRAPHQL_URL` when building the Docker image.
 
+### Vercel (frontend only)
+
+| Setting | Value |
+|--------|--------|
+| Root Directory | `frontend` |
+| Build Command | `npm run build` |
+| Output Directory | `dist/frontend/browser` |
+| Install Command | `npm install` |
+
+The `build` script runs `npx ng build --configuration production` so the CLI is resolved reliably on Vercel.
+
 ## Screenshots & submission
 
 Collect MongoDB, Postman GraphQL tests, CRUD, and search screenshots as required by the course and submit on D2L with your GitHub and live URLs.
