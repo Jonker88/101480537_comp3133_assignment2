@@ -1,0 +1,104 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Add employee</mat-card-title>
+    <mat-card-subtitle>Create a new employee record</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="grid-form">
+      <div class="row two">
+        <mat-form-field appearance="outline">
+          <mat-label>First name</mat-label>
+          <input matInput formControlName="first_name" appTrimBlur />
+          @if (form.controls.first_name.touched && form.controls.first_name.errors?.['required']) {
+            <mat-error>First name is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Last name</mat-label>
+          <input matInput formControlName="last_name" appTrimBlur />
+          @if (form.controls.last_name.touched && form.controls.last_name.errors?.['required']) {
+            <mat-error>Last name is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" appTrimBlur />
+        @if (form.controls.email.touched && form.controls.email.errors?.['required']) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (form.controls.email.touched && form.controls.email.errors?.['email']) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+      </mat-form-field>
+      <div class="row two">
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            @for (g of genders; track g) {
+              <mat-option [value]="g">{{ g }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.gender.touched && form.controls.gender.errors?.['required']) {
+            <mat-error>Gender is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Department</mat-label>
+          <input matInput formControlName="department" appTrimBlur />
+          @if (form.controls.department.touched && form.controls.department.errors?.['required']) {
+            <mat-error>Department is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="row two">
+        <mat-form-field appearance="outline">
+          <mat-label>Position (designation)</mat-label>
+          <input matInput formControlName="designation" appTrimBlur />
+          @if (form.controls.designation.touched && form.controls.designation.errors?.['required']) {
+            <mat-error>Position is required</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Salary</mat-label>
+          <input matInput type="number" formControlName="salary" min="1000" step="100" />
+          @if (form.controls.salary.touched && form.controls.salary.errors?.['required']) {
+            <mat-error>Salary is required</mat-error>
+          }
+          @if (form.controls.salary.touched && form.controls.salary.errors?.['min']) {
+            <mat-error>Salary must be at least 1000</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Date of joining</mat-label>
+        <input matInput type="date" formControlName="date_of_joining" />
+        @if (form.controls.date_of_joining.touched && form.controls.date_of_joining.errors?.['required']) {
+          <mat-error>Date of joining is required</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="photo-block">
+        <label class="photo-label" for="photo">Profile picture</label>
+        <input id="photo" type="file" accept="image/*" (change)="onFileSelected($event)" />
+        @if (fileError) {
+          <p class="field-error" role="alert">{{ fileError }}</p>
+        }
+        <div class="preview-row">
+          @if (photoPreview) {
+            <img [src]="photoPreview" alt="Preview" class="preview" />
+            <button mat-stroked-button type="button" (click)="clearPhoto()">Remove photo</button>
+          }
+        </div>
+        <p class="hint">Optional. PNG or JPEG, up to 2 MB.</p>
+      </div>
+
+      <div class="actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Saving…' : 'Save employee' }}
+        </button>
+        <button mat-button type="button" routerLink="/employees" [disabled]="loading">Cancel</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

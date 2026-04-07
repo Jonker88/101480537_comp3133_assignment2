@@ -1,0 +1,85 @@
+<mat-card class="search-card">
+  <mat-card-header>
+    <mat-card-title>Search employees</mat-card-title>
+    <mat-card-subtitle>Filter by department and/or position (designation)</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="search()" class="search-form">
+      @if (clientError) {
+        <p class="error-banner" role="alert">{{ clientError }}</p>
+      }
+      @if (error) {
+        <p class="error-banner" role="alert">{{ error }}</p>
+      }
+      <div class="row">
+        <mat-form-field appearance="outline" class="grow">
+          <mat-label>Department</mat-label>
+          <input matInput formControlName="department" placeholder="e.g. Engineering" appTrimBlur />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="grow">
+          <mat-label>Position</mat-label>
+          <input matInput formControlName="position" placeholder="e.g. Software Developer" appTrimBlur />
+        </mat-form-field>
+      </div>
+      <div class="actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+          {{ loading ? 'Searching…' : 'Search' }}
+        </button>
+        <button mat-button type="button" (click)="clear()" [disabled]="loading">Clear</button>
+      </div>
+    </form>
+
+    @if (loading) {
+      <p class="muted">Loading results…</p>
+    } @else if (searched) {
+      <h3 class="results-title">Results ({{ results.length }})</h3>
+      <div class="table-wrap">
+        <table mat-table [dataSource]="results" class="mat-elevation-z1 full-table">
+          <ng-container matColumnDef="photo">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              @if (row.employee_photo) {
+                <img [src]="row.employee_photo" alt="" class="thumb" />
+              } @else {
+                <div class="thumb placeholder">
+                  <mat-icon>person</mat-icon>
+                </div>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let row">{{ row | fullName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+          </ng-container>
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef>Department</th>
+            <td mat-cell *matCellDef="let row">{{ row.department }}</td>
+          </ng-container>
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>Position</th>
+            <td mat-cell *matCellDef="let row">{{ row.designation }}</td>
+          </ng-container>
+          <ng-container matColumnDef="salary">
+            <th mat-header-cell *matHeaderCellDef>Salary</th>
+            <td mat-cell *matCellDef="let row">{{ row.salary | salary }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <a mat-button color="primary" [routerLink]="['/employees/view', row.id]">View</a>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        @if (results.length === 0) {
+          <p class="empty">No employees matched your criteria.</p>
+        }
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

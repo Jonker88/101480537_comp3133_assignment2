@@ -1,0 +1,54 @@
+@if (loading) {
+  <div class="center">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (error || !employee) {
+  <mat-card>
+    <mat-card-content>
+      <p class="error" role="alert">{{ error ?? 'Not found' }}</p>
+      <a mat-button routerLink="/employees">Back to list</a>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card class="detail-card">
+    <mat-card-header>
+      <div class="header-row">
+        @if (employee.employee_photo) {
+          <img [src]="employee.employee_photo" alt="" class="avatar" />
+        } @else {
+          <div class="avatar placeholder">
+            <mat-icon>person</mat-icon>
+          </div>
+        }
+        <div>
+          <mat-card-title>{{ employee | fullName }}</mat-card-title>
+          <mat-card-subtitle>{{ employee.designation }} · {{ employee.department }}</mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <dl class="fields">
+        <div>
+          <dt>Email</dt>
+          <dd>{{ employee.email }}</dd>
+        </div>
+        <div>
+          <dt>Gender</dt>
+          <dd>{{ employee.gender }}</dd>
+        </div>
+        <div>
+          <dt>Salary</dt>
+          <dd>{{ employee.salary | salary }}</dd>
+        </div>
+        <div>
+          <dt>Date of joining</dt>
+          <dd>{{ employee.date_of_joining | date: 'fullDate' }}</dd>
+        </div>
+      </dl>
+      <div class="actions">
+        <a mat-flat-button color="primary" [routerLink]="['/employees/edit', employee.id]">Update</a>
+        <a mat-button routerLink="/employees">Back to list</a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}

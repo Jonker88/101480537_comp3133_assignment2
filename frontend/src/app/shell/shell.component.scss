@@ -1,0 +1,52 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fa;
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-right: 1rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+a[mat-button].active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 720px) {
+  .toolbar a span,
+  .toolbar a:not(:last-of-type) {
+    font-size: 0;
+  }
+
+  .toolbar mat-icon {
+    margin: 0;
+  }
+}
+
+.menu-user {
+  opacity: 0.85;
+  font-size: 0.875rem;
+}

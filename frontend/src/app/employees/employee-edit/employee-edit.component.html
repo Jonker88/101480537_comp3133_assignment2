@@ -1,0 +1,110 @@
+@if (initialLoad) {
+  <div class="center">
+    <mat-spinner diameter="40" />
+  </div>
+} @else if (loadError) {
+  <mat-card>
+    <mat-card-content>
+      <p class="error" role="alert">{{ loadError }}</p>
+      <a mat-button routerLink="/employees">Back to list</a>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Update employee</mat-card-title>
+      <mat-card-subtitle>Edit information and save changes</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="grid-form">
+        <div class="row two">
+          <mat-form-field appearance="outline">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="first_name" appTrimBlur />
+            @if (form.controls.first_name.touched && form.controls.first_name.errors?.['required']) {
+              <mat-error>First name is required</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="last_name" appTrimBlur />
+            @if (form.controls.last_name.touched && form.controls.last_name.errors?.['required']) {
+              <mat-error>Last name is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" appTrimBlur />
+          @if (form.controls.email.touched && form.controls.email.errors?.['required']) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (form.controls.email.touched && form.controls.email.errors?.['email']) {
+            <mat-error>Enter a valid email</mat-error>
+          }
+        </mat-form-field>
+        <div class="row two">
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              @for (g of genders; track g) {
+                <mat-option [value]="g">{{ g }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+            <input matInput formControlName="department" appTrimBlur />
+            @if (form.controls.department.touched && form.controls.department.errors?.['required']) {
+              <mat-error>Department is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="row two">
+          <mat-form-field appearance="outline">
+            <mat-label>Position (designation)</mat-label>
+            <input matInput formControlName="designation" appTrimBlur />
+            @if (form.controls.designation.touched && form.controls.designation.errors?.['required']) {
+              <mat-error>Position is required</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Salary</mat-label>
+            <input matInput type="number" formControlName="salary" min="1000" step="100" />
+            @if (form.controls.salary.touched && form.controls.salary.errors?.['min']) {
+              <mat-error>Salary must be at least 1000</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Date of joining</mat-label>
+          <input matInput type="date" formControlName="date_of_joining" />
+          @if (form.controls.date_of_joining.touched && form.controls.date_of_joining.errors?.['required']) {
+            <mat-error>Date of joining is required</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="photo-block">
+          <label class="photo-label" for="ephoto">Profile picture</label>
+          <input id="ephoto" type="file" accept="image/*" (change)="onFileSelected($event)" />
+          @if (fileError) {
+            <p class="field-error" role="alert">{{ fileError }}</p>
+          }
+          @if (photoPreview) {
+            <div class="preview-row">
+              <img [src]="photoPreview" alt="Current or new photo" class="preview" />
+            </div>
+          }
+          <p class="hint">Upload a new image to replace the current photo (optional).</p>
+        </div>
+
+        <div class="actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+            {{ loading ? 'Saving…' : 'Save changes' }}
+          </button>
+          <a mat-button [routerLink]="['/employees/view', employeeId]">Cancel</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}
